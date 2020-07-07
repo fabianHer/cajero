@@ -3,22 +3,26 @@ require 'conexion.php';
 
 $array=[];
 
-$sql="SELECT cuentas.idCuenta, cuentas.monto, usuarios.nombre, bancos.nombreBanco,cuentas.idBanco from cuentas 
+$sql="SELECT cuentas.idcuenta, cuentas.monto, usuarios.nombre, bancos.nombrebanco,cuentas.idbanco from cuentas 
 inner join usuarios
-on usuarios.idUsuario =cuentas.idUsuario
+on usuarios.idusuario =cuentas.idusuario
 inner join bancos
-on cuentas.idBanco= bancos.idBanco AND cuentas.tipo = 1";
+on cuentas.idbanco= bancos.idbanco AND cuentas.tipo = '1' ORDER BY cuentas.idcuenta DESC";
 
-$resultado = mysqli_query($con,$sql);
-$nunRows= mysqli_num_rows($resultado);
+    $stmt = $con->prepare($sql);
+    $stmt->execute();
+    $nunRows = $stmt->rowCount();
+
+/*$resultado = mysqli_query($con,$sql);
+$nunRows= mysqli_num_rows($resultado);*/
 
 $i=0;
-while ($linea= mysqli_fetch_array($resultado,MYSQLI_ASSOC)){
-	   $array[$i]['idCuenta'] = $linea['idCuenta'];
+    while ($linea= $stmt->fetch()){
+	     $array[$i]['idcuenta'] = $linea['idcuenta'];
        $array[$i]['monto'] = $linea['monto'];
        $array[$i]['nombre'] = $linea['nombre'];
-       $array[$i]['nombreBanco'] = $linea['nombreBanco'];
-       $array[$i]['idBanco'] = $linea['idBanco'];
+       $array[$i]['nombrebanco'] = $linea['nombrebanco'];
+       $array[$i]['idbanco'] = $linea['idbanco'];
 
     $i++;
 }

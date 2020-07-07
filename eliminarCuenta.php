@@ -3,12 +3,14 @@ require 'conexion.php';
 
 $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
-$idCuenta = mysqli_real_escape_string($con,$request->idCuenta);
+$idCuenta = $request->{'idcuenta'};
 
 
-$sql="DELETE FROM cuentas WHERE idCuenta ='{$idCuenta}'";
-$resultado = mysqli_query($con,$sql);
-if(mysqli_affected_rows($con) > 0){      
+$sql="DELETE FROM cuentas WHERE idcuenta ='{$idCuenta}'";
+    $stmt = $con->prepare($sql);
+    $stmt->execute();
+    $nunRows = $stmt->rowCount();
+if($nunRows> 0){      
     echo json_encode("HECHO");
   } 
 else

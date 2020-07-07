@@ -3,15 +3,15 @@ require 'conexion.php';
 
 $array=[];
 
-$sql="SELECT idBanco,nombreBanco,tipo FROM bancos WHERE tipo=2";
-
-$resultado = mysqli_query($con,$sql);
-$nunRows= mysqli_num_rows($resultado);
+$sql="SELECT idbanco,nombrebanco,tipo FROM bancos WHERE tipo='2'";
+    $stmt = $con->prepare($sql);
+    $stmt->execute();
+    $nunRows = $stmt->rowCount();
 
 $i=0;
-while ($linea= mysqli_fetch_array($resultado,MYSQLI_ASSOC)){
-	   $array[$i]['idBanco'] = $linea['idBanco'];
-       $array[$i]['nombreBanco'] = $linea['nombreBanco'];
+while ($linea= $stmt->fetch()){
+	   $array[$i]['idbanco'] = $linea['idbanco'];
+       $array[$i]['nombrebanco'] = $linea['nombrebanco'];
        $array[$i]['tipo'] = $linea['tipo'];
 
     $i++;

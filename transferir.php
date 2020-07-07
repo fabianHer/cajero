@@ -4,29 +4,42 @@ require 'conexion.php';
 $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
 
-$monto    = mysqli_real_escape_string($con,$request->monto);
+/*$monto    = mysqli_real_escape_string($con,$request->monto);
 $idCuentaTransferir = mysqli_real_escape_string($con,$request->idCuentaTransferir);
 $cuentaDonacion = mysqli_real_escape_string($con,$request->cuentaDonacion);
-$idBanco = mysqli_real_escape_string($con,$request->idBanco);
+$idBanco = mysqli_real_escape_string($con,$request->idBanco);*/
 
-$sql="UPDATE cuentas set monto = monto + {$monto} WHERE idCuenta ='{$idCuentaTransferir}'";
-$resultado = mysqli_query($con,$sql);
+$monto = $request->{'monto'};
+$idcuentatransferir = $request->{'idcuentatransferir'};
+$cuentadonacion = $request->{'cuentadonacion'};
+$idbanco = $request->{'idbanco'};
 
-$sql="UPDATE cuentas set monto = monto - {$monto} WHERE idCuenta ='{$cuentaDonacion}'";
-$resultado = mysqli_query($con,$sql);
+$sql="UPDATE cuentas set monto = monto + {$monto} WHERE idcuenta ='{$idcuentatransferir}'";
+    $stmt = $con->prepare($sql);
+    $stmt->execute();
+    $nunRows = $stmt->rowCount();
 
-if(mysqli_affected_rows($con) > 0){
+$sql="UPDATE cuentas set monto = monto - {$monto} WHERE idcuenta ='{$cuentadonacion}'";
+      $stmt = $con->prepare($sql);
+      $stmt->execute();
+      $nunRows = $stmt->rowCount();
+
+if($nunRows > 0){
  
-$sql1="SELECT idBanco FROM cuentas WHERE idCuenta ='{$idCuentaTransferir}'";
-    $resultado1 = mysqli_query($con,$sql1);
+    $sql1="SELECT idbanco FROM cuentas WHERE idcuenta ='{$idcuentatransferir}'";
+      $stmt = $con->prepare($sql1);
+      $stmt->execute();
+      $nunRows = $stmt->rowCount();
 
-    while ($linea= mysqli_fetch_array($resultado1,MYSQLI_ASSOC)){
-       $idBancoLinea=$linea['idBanco'];
+      while ($linea= $stmt->fetch()){
+       $idBancoLinea=$linea['idbanco'];
 
-    if($idBancoLinea != $idBanco){
-        $sql="UPDATE cuentas SET monto = monto - 50 WHERE idCuenta ='{$cuentaDonacion}'";
-        $resultado = mysqli_query($con,$sql);
-        if(mysqli_affected_rows($con) > 0){
+    if($idBancoLinea != $idbanco){
+        $sql="UPDATE cuentas SET monto = monto - 50 WHERE idcuenta ='{$cuentadonacion}'";
+            $stmt = $con->prepare($sql);
+            $stmt->execute();
+            $nunRows = $stmt->rowCount();
+        if($nunRows > 0){
         $data = [
             "1" => "ok",
             "2" => "descuento",
