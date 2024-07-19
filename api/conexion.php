@@ -5,6 +5,7 @@ header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Ac
 
 define('DB_HOST', 'mysql-3ed6f5e3-fabian-4543.e.aivencloud.com');
 define('DB_USER', 'avnadmin');
+define('DB_PASS', 'AVNS_JI1sNaaFuJzIku_TgqH');
 define('DB_PORT', 10403);
 define('DB_NAME', 'defaultdb');
 
